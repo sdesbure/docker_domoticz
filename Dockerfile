@@ -1,4 +1,4 @@
-FROM debian:8.3
+FROM debian:stretch
 MAINTAINER Sylvain Desbureaux <sylvain@desbureaux.fr>
 
 # install packages
