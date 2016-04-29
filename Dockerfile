@@ -33,11 +33,11 @@ RUN ln -s /src/open-zwave /src/open-zwave-read-only
 ## Domoticz installation
 
 # clone git source in src
-RUN git clone --depth 2 https://github.com/domoticz/domoticz.git /src/domoticz
+RUN git clone --depth 50 https://github.com/domoticz/domoticz.git /src/domoticz
 
 # prepare makefile
 WORKDIR /src/domoticz
-RUN cmake -DCMAKE_BUILD_TYPE=Release .
+RUN cmake -DCMAKE_BUILD_TYPE=Release . 
 
 # compile
 RUN make
