@@ -36,10 +36,10 @@ RUN ln -s /src/open-zwave /src/open-zwave-read-only
 RUN git clone --depth 2 https://github.com/domoticz/domoticz.git /src/domoticz
 
 # Domoticz needs the full history to be able to calculate the version string
+WORKDIR /src/domoticz
 RUN git fetch --unshallow
 
 # prepare makefile
-WORKDIR /src/domoticz
 RUN cmake -DCMAKE_BUILD_TYPE=Release . 
 
 # compile
@@ -47,7 +47,8 @@ RUN make
 
 # remove git and tmp dirs
 RUN apt-get remove -y git cmake linux-headers-amd64 build-essential libssl-dev libboost-dev libboost-thread-dev libboost-system-dev libsqlite3-dev libcurl4-openssl-dev libusb-dev zlib1g-dev libudev-dev && \
-   apt-get autoremove -y && \
+   apt-get autoremove -y && \ 
+   apt-get clean && \
    rm -rf /var/lib/apt/lists/*
 
 VOLUME /config
