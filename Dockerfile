@@ -29,6 +29,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 
 RUN apk add --no-cache git \
 	 git \
+	 tzdata \
 	 libssl1.0 openssl-dev \
 	 build-base cmake \
 	 boost-dev \
@@ -42,6 +43,7 @@ RUN apk add --no-cache git \
 	 zlib zlib-dev \
 	 udev eudev-dev \
 	 linux-headers && \
+	 cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
 	 git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
 	 cd /src/open-zwave && \
 	 make && \
@@ -53,7 +55,7 @@ RUN apk add --no-cache git \
 	 make && \
 	 rm -rf /src/domoticz/.git && \
 	 rm -rf /src/open-zwave/.git && \
-	 apk del git cmake linux-headers libusb-dev zlib-dev openssl-dev boost-dev sqlite-dev build-base eudev-dev coreutils curl-dev
+	 apk del git tzdata cmake linux-headers libusb-dev zlib-dev openssl-dev boost-dev sqlite-dev build-base eudev-dev coreutils curl-dev
 
 VOLUME /config
 
