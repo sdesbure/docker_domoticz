@@ -1,5 +1,6 @@
 FROM alpine:latest
-MAINTAINER Sylvain Desbureaux <sylvain@desbureaux.fr>
+MAINTAINER Sylvain Desbureaux <sylvain@desbureaux.fr> #Original creator of this Dockerfile
+MAINTAINER Cedric Gatay <c.gatay@code-troopers.com>
 
 # install packages &
 ## OpenZwave installation &
