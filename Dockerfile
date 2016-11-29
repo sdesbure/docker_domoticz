@@ -17,7 +17,7 @@ MAINTAINER Sylvain Desbureaux <sylvain@desbureaux.fr>
 ARG VCS_REF
 ARG BUILD_DATE
 
-ENV BRANCH_NAME master
+ARG BRANCH_NAME
 
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/domoticz/domoticz" \
@@ -46,7 +46,7 @@ RUN apk add --no-cache git \
 	 cd /src/open-zwave && \
 	 make && \
 	 ln -s /src/open-zwave /src/open-zwave-read-only && \
-	 git clone -b $BRANCH_NAME --depth 2 https://github.com/domoticz/domoticz.git /src/domoticz && \
+	 git clone -b ${BRANCH_NAME:-master} --depth 2 https://github.com/domoticz/domoticz.git /src/domoticz && \
 	 cd /src/domoticz && \
 	 git fetch --unshallow && \
 	 cmake -DCMAKE_BUILD_TYPE=Release . && \
