@@ -57,5 +57,5 @@ VOLUME /config
 
 EXPOSE 8080
 
-ENTRYPOINT ["/src/domoticz/domoticz", "-dbase", "/config/domoticz.db", "-log", "/config/domoticz.log"]
+ENTRYPOINT ["/src/domoticz/domoticz", "-dbase", "/config/domoticz.db"]
 CMD ["-www", "8080"]
