@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.4
 MAINTAINER Sylvain Desbureaux <sylvain@desbureaux.fr> #Original creator of this Dockerfile
 MAINTAINER Cedric Gatay <c.gatay@code-troopers.com>
 
@@ -43,6 +43,7 @@ RUN apk add --no-cache git \
 	 coreutils \
 	 zlib zlib-dev \
 	 udev eudev-dev \
+	 python3-dev \
 	 linux-headers && \
 	 cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
 	 git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
@@ -56,7 +57,7 @@ RUN apk add --no-cache git \
 	 make && \
 	 rm -rf /src/domoticz/.git && \
 	 rm -rf /src/open-zwave/.git && \
-	 apk del git tzdata cmake linux-headers libusb-dev zlib-dev openssl-dev boost-dev sqlite-dev build-base eudev-dev coreutils curl-dev
+	 apk del git tzdata cmake linux-headers libusb-dev zlib-dev openssl-dev boost-dev sqlite-dev build-base eudev-dev coreutils curl-dev python3-dev
 
 VOLUME /config
 
