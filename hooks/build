@@ -2,7 +2,13 @@
 
 echo "------ HOOK START - BUILD -------"
 printenv
-
-docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg BRANCH_NAME=$DOCKER_TAG --build-arg VCS_REF=$SOURCE_COMMIT -t $IMAGE_NAME .
+if [[ "$DOCKER_TAG" == *-beta ]]; 
+	then 
+		echo "Building beta release, stripping BRANCH_NAME from arguments"; 
+		docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=$SOURCE_COMMIT -t $IMAGE_NAME .;
+	else 
+		echo "Building stable release, using BRANCH_NAME from arguments"; 
+		docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg BRANCH_NAME=$DOCKER_TAG --build-arg VCS_REF=$SOURCE_COMMIT -t $IMAGE_NAME .;
+fi
 
 echo "------ HOOK END - BUILD -------"
