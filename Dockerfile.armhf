@@ -58,5 +58,8 @@ VOLUME /config
 
 EXPOSE 8080
 
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost:8080/ || exit 1
+
 ENTRYPOINT ["/src/domoticz/domoticz", "-dbase", "/config/domoticz.db"]
 CMD ["-www", "8080"]
