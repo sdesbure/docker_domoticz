@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 	 zlib1g-dev \
 	 libudev-dev \
 	 linux-headers-amd64 \
+	 python3-dev
 	 ca-certificates && \
 	git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
 	cd /src/open-zwave && \
@@ -38,7 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 	git fetch --unshallow && \
 	cmake -DCMAKE_BUILD_TYPE=Release . && \
 	make && \
-	apt-get remove -y git cmake linux-headers-amd64 build-essential libssl-dev libboost-dev libboost-thread-dev libboost-system-dev libsqlite3-dev libcurl4-openssl-dev libusb-dev zlib1g-dev libudev-dev && \
+	apt-get remove -y git cmake linux-headers-amd64 build-essential libssl-dev libboost-dev libboost-thread-dev libboost-system-dev libsqlite3-dev libcurl4-openssl-dev libusb-dev zlib1g-dev libudev-dev python3-dev && \
    apt-get autoremove -y && \ 
    apt-get clean && \
    rm -rf /var/lib/apt/lists/* && \
