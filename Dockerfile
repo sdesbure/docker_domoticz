@@ -37,7 +37,7 @@ RUN apk add --no-cache git \
 	 sqlite sqlite-dev \
 	 curl libcurl curl-dev \
 	 libusb libusb-dev \
-	 coreutils \
+	 coreutils tzdata \
 	 zlib zlib-dev \
 	 udev eudev-dev \
 	 linux-headers && \
