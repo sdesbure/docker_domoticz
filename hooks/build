@@ -9,7 +9,7 @@ if [[ "$BUILD_PATH" == *.arm ]];
 		DOCKERFILE="Dockerfile"
 fi
 
-if [[ "$DOCKER_TAG" == *-beta ]]; 
+if [[ "$DOCKER_TAG" == *-beta* ]]; 
 	then 
 		echo "Building beta release, stripping BRANCH_NAME from arguments"; 
 		docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=$SOURCE_COMMIT -t $IMAGE_NAME -f $DOCKERFILE .;
