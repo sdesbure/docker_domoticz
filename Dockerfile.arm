@@ -33,7 +33,7 @@ RUN ["cross-build-start"]
 RUN apk add --no-cache git \
 	 git \
 	 tzdata \
-	 libssl1.0 openssl-dev \
+	 libssl1.0 \
 	 build-base cmake \
 	 boost-dev \
 	 boost-thread \
