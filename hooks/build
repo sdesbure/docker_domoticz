@@ -2,9 +2,9 @@
 
 echo "------ HOOK START - BUILD -------"
 printenv
-if [[ "$BUILD_PATH" == *.arm ]];
+if [[ "$BUILD_PATH" == *.cc ]];
 	then
-		DOCKERFILE="Dockerfile.arm"
+		DOCKERFILE="Dockerfile.cc"
 	else
 		DOCKERFILE="Dockerfile"
 fi
