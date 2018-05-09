@@ -77,8 +77,7 @@ RUN   git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-
       apt-get clean && \
       rm -rf /var/lib/apt/lists/*
 
-
-FROM schmich/armv7hf-alpine-qemu:3.5
+FROM resin/armv7hf-debian-qemu
 COPY --from=0 /src /src
 
 
@@ -92,20 +91,14 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 
 RUN ["cross-build-start"]
 
-RUN apk add --no-cache \
-	 libssl1.0 \
-       tzdata \
-	 boost-thread \
-	 boost-system \
-	 boost-date_time \
-	 sqlite \
-	 curl libcurl \
-	 libusb \
-	 zlib \
-	 udev \
-	 python3-dev && \
-	 cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
-       apk del tzdata
+RUN \
+  apt-get update && \
+  apt-get install -y cmake apt-utils build-essential && \
+  apt-get install -y libboost-dev libboost-thread-dev libboost-system-dev libsqlite3-dev subversion curl libcurl4-openssl-dev libusb-dev zlib1g-dev libpython3-dev && \
+  apt-get install -y iputils-ping && \
+  apt-get clean && \
+  apt-get autoclean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN ["cross-build-end"]
 
