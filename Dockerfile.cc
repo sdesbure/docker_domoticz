@@ -33,22 +33,33 @@ RUN dpkg --add-architecture armhf && apt-get update && apt-get install -yq \
 	git gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
 	libssl1.0.2 libssl-dev:armhf \
 	cmake \
-      libboost-all-dev:armhf libboost-graph-parallel-dev:armhf libboost-graph-parallel1.62-dev:armhf libboost-graph-parallel1.62.0:armhf \
-      libboost-mpi-dev:armhf libboost-mpi1.62.0:armhf libboost-mpi-python-dev:armhf libboost-mpi-python1.62.0:armhf\
 	libsqlite3-0 libsqlite3-dev:armhf \
 	curl libcurl3 libcurl4-openssl-dev:armhf \
 	libusb-0.1-4 libusb-dev:armhf \
 	zlib1g-dev:armhf \
 	libudev-dev libudev-dev:armhf \
-	python3-dev:armhf python3-pip \
-      fail2ban && \
+	libpython3-dev:armhf python3-pip \
+      && \
       cp /usr/share/zoneinfo/Europe/Paris /etc/localtime 
-
 
 ENV CC arm-linux-gnueabihf-gcc
 ENV CXX arm-linux-gnueabihf-g++
 ENV LD arm-linux-gnueabihf-g++
 ENV CROSS_COMPILE arm-linux-gnueabihf-
+
+RUN apt-get install -yq wget && mkdir boost &&\
+				cd boost &&\
+				wget https://dl.bintray.com/boostorg/release/1.66.0/source/boost_1_66_0.tar.gz &&\
+				tar xfz boost_1_66_0.tar.gz &&\
+				rm boost_1_66_0.tar.gz &&\
+				cd boost_1_66_0/
+RUN	cd boost/boost_1_66_0/ && ./bootstrap.sh &&\
+    sed -i 's/using gcc ;/using gcc : arm : arm-linux-gnueabihf-g++ ;/' project-config.jam &&\
+    ./bjam install toolset=gcc-arm --prefix=/usr/local/boost  threading=multi link=static --with-thread --with-date_time --with-system --with-atomic --with-regex  &&\
+				cd ../../ &&\
+				rm -Rf boost/
+
+ENV BOOST_ROOT /usr/local/boost/
 
 RUN   git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
       cd /src/open-zwave && \
@@ -103,4 +114,4 @@ VOLUME /config
 EXPOSE 8080
 
 ENTRYPOINT ["/src/domoticz/domoticz", "-dbase", "/config/domoticz.db", "-log", "/config/domoticz.log"]
-CMD ["-www", "8080"]
+CMD ["-www", "8080"]%                                      
