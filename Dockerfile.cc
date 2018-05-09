@@ -52,8 +52,8 @@ RUN apt-get install -yq wget && mkdir boost &&\
 				wget https://dl.bintray.com/boostorg/release/1.66.0/source/boost_1_66_0.tar.gz &&\
 				tar xfz boost_1_66_0.tar.gz &&\
 				rm boost_1_66_0.tar.gz &&\
-				cd boost_1_66_0/
-RUN	cd boost/boost_1_66_0/ && ./bootstrap.sh &&\
+				cd boost_1_66_0/ &&\
+    ./bootstrap.sh &&\
     sed -i 's/using gcc ;/using gcc : arm : arm-linux-gnueabihf-g++ ;/' project-config.jam &&\
     ./bjam install toolset=gcc-arm --prefix=/usr/local/boost  threading=multi link=static --with-thread --with-date_time --with-system --with-atomic --with-regex  &&\
 				cd ../../ &&\
