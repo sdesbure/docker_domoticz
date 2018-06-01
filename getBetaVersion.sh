@@ -1,5 +1,5 @@
 #!/bin/bash
-curl --silent https://releases.domoticz.com/releases/beta/version_linux_x86_64.h | awk '{print $2"="$3}' > beta.env
+curl --silent https://releases.domoticz.com/releases/beta/version_linux_.h | awk '{print $2"="$3}' > beta.env
 source beta.env
 rm beta.env
 git branch -r | grep "3.$APPVERSION-beta"
