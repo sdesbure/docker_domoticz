@@ -7,6 +7,8 @@ EXIST=$?
 if [[ $EXIST != "0" ]]; then
 git checkout -b 3.$APPVERSION-beta
 sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile
+sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.cc
+sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.arm
 git add Dockerfile
 git commit -m"beta(): bump to 3.$APPVERSION-beta"
 git push -u origin 3.$APPVERSION-beta
