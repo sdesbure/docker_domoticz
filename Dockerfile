@@ -15,12 +15,11 @@ MAINTAINER Cedric Gatay <c.gatay@code-troopers.com>
 # compile &
 # remove git and tmp dirs
 
+ARG APP_HASH
 ARG VCS_REF
 ARG BUILD_DATE
 
-ARG BRANCH_NAME
-
-LABEL org.label-schema.vcs-ref=$VCS_REF \
+LABEL org.label-schema.vcs-ref=$APP_HASH \
       org.label-schema.vcs-url="https://github.com/domoticz/domoticz" \
       org.label-schema.url="https://domoticz.com/" \
       org.label-schema.name="Domoticz" \
@@ -28,40 +27,76 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.license="GPLv3" \
       org.label-schema.build-date=$BUILD_DATE
 
-RUN apk add --no-cache git \
-	 git \
-	 tzdata \
-	 libssl1.0 openssl-dev \
-	 build-base cmake \
-	 boost-dev \
-	 boost-thread \
-	 boost-system \
-	 boost-date_time \
-	 sqlite sqlite-dev \
-	 curl libcurl curl-dev \
-	 libusb libusb-dev \
-	 coreutils \
-	 zlib zlib-dev \
-	 udev eudev-dev \
-	 python3-dev \
-	 linux-headers && \
-	 cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
-	 git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
-	 cd /src/open-zwave && \
-	 make && \
-	 ln -s /src/open-zwave /src/open-zwave-read-only && \
-	 git clone -b ${BRANCH_NAME:-development} --depth 2 https://github.com/domoticz/domoticz.git /src/domoticz && \
-	 cd /src/domoticz && \
-	 git fetch --unshallow && \
-	 cmake -DCMAKE_BUILD_TYPE=Release . && \
-	 make && \
-	 rm -rf /src/domoticz/.git && \
-	 rm -rf /src/open-zwave/.git && \
-	 apk del git tzdata cmake linux-headers libusb-dev zlib-dev openssl-dev boost-dev sqlite-dev build-base eudev-dev coreutils curl-dev
+RUN apk add --no-cache \
+		git \
+		python3-dev \
+		build-base cmake \
+		boost-dev \
+		boost-thread \
+		boost-system \
+		boost-date_time \
+		sqlite sqlite-dev \
+		curl libcurl curl-dev \
+		libssl1.0 libressl-dev \
+		libusb libusb-dev \
+		libusb-compat libusb-compat-dev \
+		lua5.2-dev \
+		minizip-dev \
+		mosquitto-dev \
+		coreutils \
+		tzdata \
+		zlib zlib-dev \
+		udev eudev-dev \
+		linux-headers && \
+	# Build OpenZwave
+	git clone --depth 2 https://github.com/OpenZWave/open-zwave.git /src/open-zwave && \
+	ln -s /src/open-zwave /src/open-zwave-read-only && \
+	cd /src/open-zwave && \
+	make && \
+ 	make \
+		instlibdir=usr/lib \
+		pkgconfigdir="usr/lib/pkgconfig/" \
+		PREFIX=/usr \
+		sysconfdir=etc/openzwave \
+	install && \
+	cd / && \
+	rm -rf /src/open-zwave && \
+	# Build Domoticz
+	git clone https://github.com/domoticz/domoticz.git /src/domoticz && \
+	cd /src/domoticz && \
+	git reset --hard ${APP_HASH} && \
+	cmake \
+	 	-DBUILD_SHARED_LIBS=True \
+	 	-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/opt/domoticz \
+		-DOpenZWave=/usr/lib/libopenzwave.so \
+		-DUSE_BUILTIN_LUA=OFF \
+		-DUSE_BUILTIN_MINIZIP=OFF \
+		-DUSE_BUILTIN_MQTT=OFF \
+		-DUSE_BUILTIN_SQLITE=OFF \
+		-DUSE_STATIC_OPENZWAVE=OFF \
+		-Wno-dev && \
+	make && \
+	make install && \
+	rm -rf /src/domoticz/ && \
+	# Cleanup
+	apk del \ 
+		git \
+		build-base cmake \
+		boost-dev \
+		sqlite-dev \
+		curl-dev \
+		libressl-dev \
+		libusb-dev \
+		libusb-compat-dev \
+		coreutils \
+		zlib-dev \
+		eudev-dev \
+		linux-headers
 
 VOLUME /config
 
 EXPOSE 8080
 
-ENTRYPOINT ["/src/domoticz/domoticz", "-dbase", "/config/domoticz.db", "-log", "/config/domoticz.log"]
+ENTRYPOINT ["/opt/domoticz/domoticz", "-dbase", "/config/domoticz.db", "-log", "/config/domoticz.log"]
 CMD ["-www", "8080"]
