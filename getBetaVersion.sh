@@ -6,7 +6,7 @@ git branch -r | grep "3.$APPVERSION-beta"
 EXIST=$?
 if [[ $EXIST != "0" ]]; then
 git checkout -b 3.$APPVERSION-beta
-sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile
+sed -i "s/ARG APP_HASH/ENV APP_HASH=$APPHASH/g" Dockerfile
 sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.cc
 sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.arm
 git add Dockerfile
