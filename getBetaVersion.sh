@@ -9,6 +9,7 @@ git checkout -b 4.$APPVERSION-beta
 sed -i "s/ARG APP_HASH/ENV APP_HASH=$APPHASH/g" Dockerfile
 sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.cc
 sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.arm
+sed -i "s/ARG BRANCH_NAME/ENV BUILD_BRANCH=$APPHASH/g" Dockerfile.deb
 git add Dockerfile
 git commit -m"beta(): bump to 4.$APPVERSION-beta"
 git push -u origin 4.$APPVERSION-beta

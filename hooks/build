@@ -5,6 +5,9 @@ printenv
 if [[ "$BUILD_PATH" == *.cc ]];
 	then
 		DOCKERFILE="Dockerfile.cc"
+  elif [[ "$BUILD_PATH" == *.deb  ]];
+  then
+    DOCKERFILE="Dockerfile.deb"
 	else
 		DOCKERFILE="Dockerfile"
 fi
